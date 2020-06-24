@@ -22,6 +22,8 @@ import com.example.flixster.models.Movie;
 
 import java.util.List;
 
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
 
     Context context;
@@ -74,15 +76,19 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             tvTitle.setText(movie.getTitle());
             tvOverview.setText(movie.getOverview());
             String imageURL;
-            int radius = 30;
+            RequestOptions options;
+            int radius = 70;
             // If phone is in landscape, imageURL is backdrop image
             // If phone is in portrait, imageURL is poster image
             if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 imageURL = movie.getBackdropPath();
+                options = new RequestOptions().placeholder(R.drawable.flicks_backdrop_placeholder);
             } else {
                 imageURL = movie.getPosterPath();
+                options = new RequestOptions().placeholder(R.drawable.flicks_movie_placeholder);
             }
-            Glide.with(context).load(imageURL).into(ivPoster);
+
+            Glide.with(context).load(imageURL).apply(options).into(ivPoster);
         }
     }
 }
