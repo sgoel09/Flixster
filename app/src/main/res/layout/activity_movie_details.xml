@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:textColor="#FFFFFF"
+    android:background="#07031a"
     tools:context=".MovieDetailsActivity">
 
     <TextView
@@ -15,24 +17,60 @@
         android:layout_alignParentTop="true"
         android:text="Movie Title"
         android:textAppearance="@android:style/TextAppearance.Large"
+        android:textSize="24sp"
+        android:textColor="#fbd46d"
+        android:background="#07031a"
+        android:fontFamily="sans-serif-medium"
+        android:textStyle="bold"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
         tools:text="Sample Title" />
 
     <RatingBar
         android:id="@+id/rbVoteAverage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvTitle"
-        android:layout_marginTop="2dp"
-        style="@style/Widget.AppCompat.RatingBar.Small"
-        tools:layout_editor_absoluteX="3dp" />
+        android:layout_below="@+id/tvDate"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:numStars="5"
+        android:progressTint="#f4f6ff"
+        android:progressBackgroundTint="#07031a"
+        android:stepSize="0.5" />
 
     <TextView
         android:id="@+id/tvOverview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/rbVoteAverage"
-        android:layout_marginBottom="-21dp"
-        android:text="Sample Overview" />
+        android:layout_below="@+id/rbVoteAverage"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:background="#07031a"
+        android:textColor="#f4f6ff"
+        android:textSize="16sp"
+        tools:text="Sample Overview" />
+
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvTitle"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:background="#07031a"
+        android:textColor="#f4f6ff"
+        android:textSize="18sp"
+        tools:text="Sample Date" />
 </RelativeLayout>
