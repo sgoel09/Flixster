@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#07031a"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -9,15 +14,26 @@
     tools:context=".MovieDetailsActivity">
 
     <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="427dp"
+        android:id="@+id/tvOverview"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="false"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="false"
-        android:layout_marginStart="10dp"
+        android:layout_below="@+id/relative2"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="14dp"
         android:layout_marginLeft="30dp"
         android:layout_marginTop="15dp"
+        android:background="#07031a"
+        android:textColor="#f4f6ff"
+        android:textSize="16sp"
+        tools:text="Sample Overview" />
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="12dp"
         android:layout_toEndOf="@+id/relative2"
         android:background="#07031a"
         android:fontFamily="sans-serif-medium"
@@ -28,60 +44,43 @@
         android:textStyle="bold"
         tools:text="Sample Title" />
 
-    <TextView
-        android:id="@+id/tvOverview"
+    <RatingBar
+        android:id="@+id/rbVoteAverage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/relative2"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginStart="10dp"
+        android:layout_below="@+id/tvDate"
+        android:layout_marginStart="31dp"
         android:layout_marginLeft="30dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginRight="599dp"
-        android:background="#07031a"
-        android:textColor="#f4f6ff"
-        android:textSize="16sp"
-        tools:text="Sample Overview" />
+        android:layout_marginTop="13dp"
+        android:layout_toEndOf="@+id/relative2"
+        android:numStars="5"
+        android:progressBackgroundTint="#666666"
+        android:progressTint="#f4f6ff"
+        android:stepSize="0.5" />
 
     <TextView
         android:id="@+id/tvDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvTitle"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="28dp"
         android:layout_marginLeft="30dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="12dp"
         android:layout_toEndOf="@+id/relative2"
         android:background="#07031a"
         android:textColor="#f4f6ff"
         android:textSize="18sp"
         tools:text="Sample Date" />
 
-    <RatingBar
-        android:id="@+id/rbVoteAverage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvDate"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="30dp"
-        android:layout_toEndOf="@+id/relative2"
-        android:numStars="5"
-        android:progressTint="#f4f6ff"
-        android:progressBackgroundTint="#666666"
-        android:stepSize="0.5"/>
-
     <RelativeLayout
         android:id="@+id/relative2"
-        android:layout_width="399dp"
-        android:layout_height="236dp">
+        android:layout_width="367dp"
+        android:layout_height="220dp">
 
         <ImageView
             android:id="@+id/ivBackdrop"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="320dp"
+            android:layout_height="187dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="15dp"
             android:adjustViewBounds="true"
@@ -98,6 +97,9 @@
             android:layout_marginTop="15dp"
             android:scaleType="fitXY"
             tools:srcCompat="@tools:sample/avatars" />
+
     </RelativeLayout>
 
 </RelativeLayout>
+
+</ScrollView>
