@@ -1,5 +1,6 @@
 package com.example.flixster.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -19,40 +20,38 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.flixster.MovieDetailsActivity;
 import com.example.flixster.R;
+import com.example.flixster.databinding.ItemMovieBinding;
 import com.example.flixster.models.Movie;
 
 import org.parceler.Parcels;
 
 import java.util.List;
 
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
-
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
 
-    Context context;
+    Activity context;
     List<Movie> movies;
 
-    public MovieAdapter(Context context, List<Movie> movies) {
+    public MovieAdapter(Activity context, List<Movie> movies) {
         this.context = context;
         this.movies = movies;
     }
 
-    // Usually involves inflating a layout from XML and returning the holder
+    // Inflate layout from XML and return holder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Log.d("MovieAdapter", "onCreateViewHolder");
-        View movieView = LayoutInflater.from(context).inflate(R.layout.item_movie, parent, false);
-        return new ViewHolder(movieView);
+        ItemMovieBinding binding = ItemMovieBinding.inflate(context.getLayoutInflater());
+        View movieView = binding.getRoot();
+        return new ViewHolder(movieView, binding);
     }
 
     // Involves populating data into the view through holder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Log.d("MovieAdapter", "onBindViewHolder" + position);
-        // Get the movie at the passed in position
         Movie movie = movies.get(position);
-        // Bind the movie data into the view holder
         holder.bind(movie);
     }
 
@@ -64,24 +63,20 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView tvTitle;
-        TextView tvOverview;
-        ImageView ivPoster;
+        ItemMovieBinding binding;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView, ItemMovieBinding bind) {
             super(itemView);
-            tvTitle = itemView.findViewById(R.id.tvTitle);
-            tvOverview = itemView.findViewById(R.id.tvOverview);
-            ivPoster = itemView.findViewById(R.id.ivPoster);
+            bind.getRoot();
+            binding = bind;
             itemView.setOnClickListener(this);
         }
 
         public void bind(Movie movie) {
-            tvTitle.setText(movie.getTitle());
-            tvOverview.setText(movie.getOverview());
+            binding.tvTitle.setText(movie.getTitle());
+            binding.tvOverview.setText(movie.getOverview());
             String imageURL;
             RequestOptions options;
-            int radius = 70; int margin = 10;
             // If phone is in landscape, imageURL is backdrop image
             // If phone is in portrait, imageURL is poster image
             if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -92,7 +87,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
                 options = new RequestOptions().placeholder(R.drawable.flicks_movie_placeholder);
             }
 
-            Glide.with(context).load(imageURL).transform(new RoundedCorners(70)).apply(options).into(ivPoster);
+            Glide.with(context).load(imageURL).transform(new RoundedCorners(70)).apply(options).into(binding.ivPoster);
         }
 
         // When the user clicks on a row, show MovieDetailsActivity for the selected movie

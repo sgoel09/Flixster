@@ -17,6 +17,8 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
+import com.example.flixster.databinding.ActivityMovieDetailsBinding;
+import com.example.flixster.databinding.ActivityMovieTrailerBinding;
 import com.example.flixster.models.Movie;
 
 import org.json.JSONArray;
@@ -30,45 +32,32 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
     Movie movie;
 
-    TextView tvTitle;
-    TextView tvOverview;
-    TextView tvDate;
-    ImageView ivBackdrop;
-    ImageView ivOverlay;
-    RatingBar rbVoteAverage;
     Integer movieId;
-
     String movieKey = "";
 
     @SuppressLint("Range")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_movie_details);
-
-        // Resolve the view objects
-        tvTitle = findViewById(R.id.tvTitle);
-        tvOverview = findViewById(R.id.tvOverview);
-        tvDate = findViewById(R.id.tvDate);
-        rbVoteAverage = findViewById(R.id.rbVoteAverage);
-        ivBackdrop = findViewById(R.id.ivBackdrop);
-        ivOverlay = findViewById(R.id.ivOverlay);
+        ActivityMovieDetailsBinding binding = ActivityMovieDetailsBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
 
         // Unwrap the movie passed in via itnent, using its simple name as key
         movie = (Movie) Parcels.unwrap(getIntent().getParcelableExtra(Movie.class.getSimpleName()));
         Log.d("MovieDetailsActivity", String.format("Showing details for '%s", movie.getTitle()));
 
         // Set the title and overview
-        tvTitle.setText(movie.getTitle());
-        tvOverview.setText(movie.getOverview());
-        tvDate.setText(movie.getReleaseDate());
+        binding.tvTitle.setText(movie.getTitle());
+        binding.tvOverview.setText(movie.getOverview());
+        binding.tvDate.setText(movie.getReleaseDate());
 
         // Vote average is 0..10, covert to 0..5
         float voteAverage = movie.getVoteAverage().floatValue();
         if (voteAverage > 0) {
            voteAverage /= 2.0f;
         }
-        rbVoteAverage.setRating(voteAverage);
+        binding.rbVoteAverage.setRating(voteAverage);
 
         movieId = movie.getId();
 
@@ -95,12 +84,12 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         RequestOptions options = new RequestOptions().placeholder(R.drawable.flicks_backdrop_placeholder);
         String imageURL = movie.getBackdropPath();
-        Glide.with(this).load(imageURL).transform(new RoundedCorners(70)).apply(options).into(ivBackdrop);
-        ivOverlay.setImageResource(R.mipmap.circlecropped);
+        Glide.with(this).load(imageURL).transform(new RoundedCorners(70)).apply(options).into(binding.ivBackdrop);
+        binding.ivOverlay.setImageResource(R.mipmap.circlecropped);
         float alpha = (float) 0.7;
-        ivOverlay.setAlpha(alpha);
+        binding.ivOverlay.setAlpha(alpha);
 
-        ivBackdrop.setOnClickListener(new View.OnClickListener() {
+        binding.ivBackdrop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!movieKey.equals("")) {
