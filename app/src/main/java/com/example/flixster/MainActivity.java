@@ -2,7 +2,6 @@ package com.example.flixster;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -12,7 +11,6 @@ import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.flixster.adapters.MovieAdapter;
 import com.example.flixster.databinding.ActivityMainBinding;
-import com.example.flixster.databinding.ActivityMovieTrailerBinding;
 import com.example.flixster.models.Movie;
 
 import org.json.JSONArray;
@@ -24,15 +22,19 @@ import java.util.List;
 
 import okhttp3.Headers;
 
+// Class that represents the activity when the application is launched
 public class MainActivity extends AppCompatActivity {
 
     public static final String NOW_PLAYING_URL = "https://api.themoviedb.org/3/movie/now_playing?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed";
+    public static final String CONFIGURATION_URL = "https://api.themoviedb.org/3/configuration?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed";
     public static final String TAG = "MainActivity";
 
     List<Movie> movies;
+    List<String> widths_poster = new ArrayList<>();
+    List<String> widths_backdrop = new ArrayList<>();
     String finalPosterWidth;
     String finalBackdropWidth;
-    static String[] poster_size;
+    static String[] sizes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,14 +46,16 @@ public class MainActivity extends AppCompatActivity {
         // Create the adapter
         final MovieAdapter movieAdapter = new MovieAdapter(this, movies);
 
-        poster_size = getImageWidth();
+        // Retrieve the size of poster and backdrop to be used
+        sizes = getImageWidth();
 
-        // Set the adapter on the recycler view
+        // Set the adapter on recycler view
         binding.rvMovies.setAdapter(movieAdapter);
 
         // Set a Layout Manager on the recycler view
         binding.rvMovies.setLayoutManager(new LinearLayoutManager(this));
 
+        // Access API to get information about each movie and notify adapter
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(NOW_PLAYING_URL, new JsonHttpResponseHandler() {
             @Override
@@ -76,11 +80,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    List<String> widths_poster = new ArrayList<>();
-    List<String> widths_backdrop = new ArrayList<>();
-
+    // Access API to get the poster and backdrop sizes and choose one in the appropriate range
     private String[] getImageWidth() {
-        String CONFIGURATION_URL = "https://api.themoviedb.org/3/configuration?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed";
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(CONFIGURATION_URL, new JsonHttpResponseHandler() {
             @Override
@@ -121,10 +122,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         return new String[]{finalPosterWidth, finalBackdropWidth};
     }
 
+    // Returns a list of items in a JSONArray
     private List<String> extractJsonArray(JSONArray sizeJsonArray) throws JSONException {
         List<String> sizes = new ArrayList<>();
         for (int i = 0; i < sizeJsonArray.length(); i++) {
@@ -133,7 +134,8 @@ public class MainActivity extends AppCompatActivity {
         return sizes;
     }
 
-    public static String[] getPoster_size() {
-        return poster_size;
+    // Getter method for the sizes array
+    public static String[] getSizes() {
+        return sizes;
     }
 }

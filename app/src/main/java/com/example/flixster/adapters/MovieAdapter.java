@@ -1,16 +1,11 @@
 package com.example.flixster.adapters;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.os.Parcel;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,6 +22,7 @@ import org.parceler.Parcels;
 
 import java.util.List;
 
+// Adapter class for the recycle view of movie items
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
 
     Activity context;
@@ -47,7 +43,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         return new ViewHolder(movieView, binding);
     }
 
-    // Involves populating data into the view through holder
+    // Binds data into respective views through the holder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Log.d("MovieAdapter", "onBindViewHolder" + position);
@@ -55,30 +51,31 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         holder.bind(movie);
     }
 
-    // Return the total count of movies in the list
+    // Returns the total count of movies in the list
     @Override
     public int getItemCount() {
         return movies.size();
     }
 
+    // Class that contains all views in each item of the recycler view
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ItemMovieBinding binding;
 
-        public ViewHolder(@NonNull View itemView, ItemMovieBinding bind) {
+        public ViewHolder(@NonNull View itemView, ItemMovieBinding firstBind) {
             super(itemView);
-            bind.getRoot();
-            binding = bind;
+            firstBind.getRoot();
+            binding = firstBind;
             itemView.setOnClickListener(this);
         }
 
+        // Binds data to respective view to appear on the activity
         public void bind(Movie movie) {
             binding.tvTitle.setText(movie.getTitle());
             binding.tvOverview.setText(movie.getOverview());
             String imageURL;
             RequestOptions options;
-            // If phone is in landscape, imageURL is backdrop image
-            // If phone is in portrait, imageURL is poster image
+            // Assigns URL of image based on the orientation of the phone
             if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 imageURL = movie.getBackdropPath();
                 options = new RequestOptions().placeholder(R.drawable.flicks_backdrop_placeholder);
@@ -90,20 +87,14 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             Glide.with(context).load(imageURL).transform(new RoundedCorners(70)).apply(options).into(binding.ivPoster);
         }
 
-        // When the user clicks on a row, show MovieDetailsActivity for the selected movie
+        // Calls the MovieDetailsActivity when a row is clicked
         @Override
         public void onClick(View view) {
-            // Gets item position
             int position = getAdapterPosition();
-            // Make sure the position is valid
             if (position != RecyclerView.NO_POSITION) {
-                // Get the movie at the position
                 Movie movie = movies.get(position);
-                // Create intent for the new activity
                 Intent intent = new Intent(context, MovieDetailsActivity.class);
-                // Serialize the movie using parceler and use the short name as key
                 intent.putExtra(Movie.class.getSimpleName(), Parcels.wrap(movie));
-                // Show the activity
                 context.startActivity(intent);
             }
         }

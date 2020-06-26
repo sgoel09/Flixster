@@ -10,6 +10,7 @@ import org.parceler.Parcel;
 import java.util.ArrayList;
 import java.util.List;
 
+// Class that defines the information for a movie
 @Parcel
 public class Movie {
 
@@ -20,10 +21,11 @@ public class Movie {
     Double voteAverage;
     String releaseDate;
     Integer id;
-    String subString;
+    String width;
 
     public Movie() {}
 
+    // Retrieves all the information for the movie from the JSONObject
     public Movie(JSONObject jsonObject) throws JSONException {
         backdropPath = jsonObject.getString("backdrop_path");
         posterPath = jsonObject.getString("poster_path");
@@ -34,6 +36,7 @@ public class Movie {
         id = jsonObject.getInt("id");
     }
 
+    // Returns a list of movies from the JSONArray
     public static List<Movie> fromJsonArray(JSONArray movieJsonArray) throws JSONException {
         List<Movie> movies = new ArrayList<>();
         for (int i = 0; i < movieJsonArray.length(); i++) {
@@ -42,8 +45,9 @@ public class Movie {
         return movies;
     }
 
+    // Returns the URL path for the poster image
     public String getPosterPath() {
-        String width = MainActivity.getPoster_size()[0];
+        String width = MainActivity.getSizes()[0];
         if (width != null) {
             return String.format("https://image.tmdb.org/t/p/%s/%s", width, posterPath);
         }
@@ -51,30 +55,36 @@ public class Movie {
 
     }
 
+    // Returns the URL path for the backdrop image
     public String getBackdropPath() {
-        String width = MainActivity.getPoster_size()[1];
+        String width = MainActivity.getSizes()[1];
         if (width != null) {
             return String.format("https://image.tmdb.org/t/p/%s/%s", width, backdropPath);
         }
         return String.format("https://image.tmdb.org/t/p/w342/%s", backdropPath);
     }
 
+    // Returns the title of the movie
     public String getTitle() {
         return title;
     }
 
+    // Returns the overview of the movie
     public String getOverview() {
         return overview;
     }
 
+    // Returns the average of the movie's votes
     public Double getVoteAverage() {
         return voteAverage;
     }
 
+    // Returns the release date of the movie
     public String getReleaseDate() {
         return "Release Date: " + releaseDate;
     }
 
+    // Returns the ID of the movie
     public int getId() {
         return id;
     }

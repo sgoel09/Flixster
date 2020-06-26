@@ -24,10 +24,10 @@ import org.parceler.Parcels;
 
 import okhttp3.Headers;
 
+// Class that represents the activity that displays a movie's details
 public class MovieDetailsActivity extends AppCompatActivity {
 
     Movie movie;
-
     Integer movieId;
     String movieKey = "";
 
@@ -39,7 +39,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
-        // Unwrap the movie passed in via itnent, using its simple name as key
+        // Unwrap the movie passed in via intent, using its simple name as key
         movie = (Movie) Parcels.unwrap(getIntent().getParcelableExtra(Movie.class.getSimpleName()));
         Log.d("MovieDetailsActivity", String.format("Showing details for '%s", movie.getTitle()));
 
@@ -48,17 +48,16 @@ public class MovieDetailsActivity extends AppCompatActivity {
         binding.tvOverview.setText(movie.getOverview());
         binding.tvDate.setText(movie.getReleaseDate());
 
-        // Vote average is 0..10, covert to 0..5
+        // Convert vote average to a scale from 0-5
         float voteAverage = movie.getVoteAverage().floatValue();
         if (voteAverage > 0) {
            voteAverage /= 2.0f;
         }
         binding.rbVoteAverage.setRating(voteAverage);
 
+        // Access the API to get the key for the YouTube video of the movie
         movieId = movie.getId();
-
         String VIDEO_URL = "https://api.themoviedb.org/3/movie/" + movieId + "/videos?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed";
-
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(VIDEO_URL, new JsonHttpResponseHandler() {
             @Override
@@ -78,6 +77,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
             }
         });
 
+        // Display the backdrop and play button overlay
         RequestOptions options = new RequestOptions().placeholder(R.drawable.flicks_backdrop_placeholder);
         String imageURL = movie.getBackdropPath();
         Glide.with(this).load(imageURL).transform(new RoundedCorners(70)).apply(options).into(binding.ivBackdrop);
@@ -85,6 +85,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         float alpha = (float) 0.7;
         binding.ivOverlay.setAlpha(alpha);
 
+        // Start the trailer activity on click of the backdrop
         binding.ivBackdrop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

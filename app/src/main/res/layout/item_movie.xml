@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textColor="#FFFFFF"
+    android:textColor="#f4f6ff"
     android:background="#07031a">
 
     <ImageView
@@ -19,7 +19,7 @@
         android:layout_marginBottom="15dp"
         android:scaleType="fitXY"
         android:adjustViewBounds="true"
-        android:textColor="#FFFFFF"
+        android:textColor="#f4f6ff"
         android:background="#07031a"
         android:textStyle="bold"
         tools:srcCompat="@tools:sample/avatars" />
