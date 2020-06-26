@@ -1,5 +1,7 @@
 package com.example.flixster.models;
 
+import com.example.flixster.MainActivity;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,6 +20,7 @@ public class Movie {
     Double voteAverage;
     String releaseDate;
     Integer id;
+    String subString;
 
     public Movie() {}
 
@@ -40,10 +43,19 @@ public class Movie {
     }
 
     public String getPosterPath() {
+        String width = MainActivity.getPoster_size()[0];
+        if (width != null) {
+            return String.format("https://image.tmdb.org/t/p/%s/%s", width, posterPath);
+        }
         return String.format("https://image.tmdb.org/t/p/w342/%s", posterPath);
+
     }
 
     public String getBackdropPath() {
+        String width = MainActivity.getPoster_size()[1];
+        if (width != null) {
+            return String.format("https://image.tmdb.org/t/p/%s/%s", width, backdropPath);
+        }
         return String.format("https://image.tmdb.org/t/p/w342/%s", backdropPath);
     }
 

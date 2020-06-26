@@ -27,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
     public static final String TAG = "MainActivity";
 
     List<Movie> movies;
+    String finalPosterWidth;
+    String finalBackdropWidth;
+    static String[] poster_size;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
         movies = new ArrayList<>();
         // Create the adapter
         final MovieAdapter movieAdapter = new MovieAdapter(this, movies);
+
+        poster_size = getImageWidth();
 
         // Set the adapter on the recycler view
         rvMovies.setAdapter(movieAdapter);
@@ -65,5 +70,66 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "onFailure");
             }
         });
+    }
+
+    List<String> widths_poster = new ArrayList<>();
+    List<String> widths_backdrop = new ArrayList<>();
+
+    private String[] getImageWidth() {
+        String CONFIGURATION_URL = "https://api.themoviedb.org/3/configuration?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed";
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.get(CONFIGURATION_URL, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                JSONObject jsonObject = json.jsonObject;
+                try {
+                    JSONObject images = jsonObject.getJSONObject("images");
+                    JSONArray widthPosterFromJSON = images.getJSONArray("poster_sizes");
+                    widths_poster = extractJsonArray(widthPosterFromJSON);
+                    if (!widths_poster.isEmpty()) {
+                        for (String s : widths_poster) {
+                            finalPosterWidth = s.substring(1);
+                            int intSize = Integer.parseInt(finalPosterWidth);
+                            if (200 < intSize & intSize < 400) {
+                                break;
+                            }
+                        }
+                    }
+                    JSONArray widthBackdropFromJSON = images.getJSONArray("backdrop_sizes");
+                    widths_backdrop = extractJsonArray(widthBackdropFromJSON);
+                    if (!widths_backdrop.isEmpty()) {
+                        for (String s : widths_backdrop) {
+                            finalBackdropWidth = s.substring(1);
+                            int intSize = Integer.parseInt(finalBackdropWidth);
+                            if (200 < intSize & intSize < 400) {
+                                break;
+                            }
+                        }
+                    }
+                } catch (JSONException e) {
+                    Log.i("MovieDetailsActivity", "Failed to get video ID");
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                Log.i("MovieDetailsActivity", "Failed to get data for video");
+            }
+        });
+
+
+        return new String[]{finalPosterWidth, finalBackdropWidth};
+    }
+
+    private List<String> extractJsonArray(JSONArray sizeJsonArray) throws JSONException {
+        List<String> sizes = new ArrayList<>();
+        for (int i = 0; i < sizeJsonArray.length(); i++) {
+            sizes.add(sizeJsonArray.get(i).toString());
+        }
+        return sizes;
+    }
+
+    public static String[] getPoster_size() {
+        return poster_size;
     }
 }
