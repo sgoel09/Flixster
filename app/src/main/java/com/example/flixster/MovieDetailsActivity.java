@@ -2,6 +2,7 @@ package com.example.flixster;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,11 +34,13 @@ public class MovieDetailsActivity extends AppCompatActivity {
     TextView tvOverview;
     TextView tvDate;
     ImageView ivBackdrop;
+    ImageView ivOverlay;
     RatingBar rbVoteAverage;
     Integer movieId;
 
     String movieKey = "";
 
+    @SuppressLint("Range")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +52,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         tvDate = findViewById(R.id.tvDate);
         rbVoteAverage = findViewById(R.id.rbVoteAverage);
         ivBackdrop = findViewById(R.id.ivBackdrop);
+        ivOverlay = findViewById(R.id.ivOverlay);
 
         // Unwrap the movie passed in via itnent, using its simple name as key
         movie = (Movie) Parcels.unwrap(getIntent().getParcelableExtra(Movie.class.getSimpleName()));
@@ -92,14 +96,19 @@ public class MovieDetailsActivity extends AppCompatActivity {
         RequestOptions options = new RequestOptions().placeholder(R.drawable.flicks_backdrop_placeholder);
         String imageURL = movie.getBackdropPath();
         Glide.with(this).load(imageURL).transform(new RoundedCorners(70)).apply(options).into(ivBackdrop);
+        ivOverlay.setImageResource(R.mipmap.circlecropped);
+        float alpha = (float) 0.7;
+        ivOverlay.setAlpha(alpha);
 
         ivBackdrop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Context context = view.getContext();
-                Intent i = new Intent(context, MovieTrailerActivity.class);
-                i.putExtra("videoID", movieKey);
-                context.startActivity(i);
+                if (!movieKey.equals("")) {
+                    Context context = view.getContext();
+                    Intent i = new Intent(context, MovieTrailerActivity.class);
+                    i.putExtra("videoID", movieKey);
+                    context.startActivity(i);
+                }
             }
         });
 
