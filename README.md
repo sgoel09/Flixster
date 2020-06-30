@@ -26,6 +26,7 @@ The following **additional** features are implemented:
 
 * [x] Added scrolling functionality to the details page in both potrait and landscape orientations.
 * [x] Used the Configuration API to select poster and background image sizes to ones available and in between a specific size range.
+* [x] Accessed API to display release date of each movie in the details page.
 
 ## Video Walkthrough
 
